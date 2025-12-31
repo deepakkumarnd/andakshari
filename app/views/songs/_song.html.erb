@@ -1,0 +1,22 @@
+<div id="<%= dom_id song %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Pallavi:</strong>
+    <%= format_song(song.pallavi) %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Lyrics:</strong>
+    <%= format_song(song.lyrics) %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Movie:</strong>
+    <%= song.movie %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Year:</strong>
+    <%= song.year %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Letter:</strong>
+    <%= song.letter.letter %>
+  </div>
+</div>
