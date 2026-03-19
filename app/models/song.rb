@@ -1,4 +1,6 @@
 class Song < ApplicationRecord
+  has_many :chunks, dependent: :destroy
+
   def cleanup!
     self.lyrics = self.lyrics.strip
     self.movie = self.movie.strip

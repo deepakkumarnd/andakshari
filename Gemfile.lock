@@ -159,6 +159,8 @@ GEM
     minitest (6.0.1)
       prism (~> 1.5)
     msgpack (1.8.0)
+    neighbor (0.6.0)
+      activerecord (>= 7.1)
     net-imap (0.6.2)
       date
       net-protocol
@@ -391,6 +393,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  neighbor
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
