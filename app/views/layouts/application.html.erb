@@ -23,8 +23,12 @@
   </head>
 
   <body>
-    <main class="w-full mt-28 px-5 flex">
+    <%= render "layouts/navbar" %>
+    <main class="w-full mt-20 px-5 flex">
       <%= yield %>
     </main>
+    <footer class="mt-10 py-5 border-t border-gray-200 text-center text-sm text-gray-400">
+      Andakshari &mdash; a song search engine
+    </footer>
   </body>
 </html>

@@ -1,22 +1,17 @@
 <div id="<%= dom_id song %>" class="w-full sm:w-auto my-5 space-y-5">
+  <p class="text-sm text-gray-500 flex items-center gap-2">
+    <span><strong>Letter:</strong> <%= song.letter %></span>
+    <% if song.movie.present? %>
+      <span class="text-gray-300">|</span>
+      <span><strong>Movie:</strong> <%= song.movie %></span>
+    <% end %>
+    <% if song.year.present? %>
+      <span class="text-gray-300">|</span>
+      <span><strong>Year:</strong> <%= song.year %></span>
+    <% end %>
+  </p>
   <div>
-    <strong class="block font-medium mb-1">Pallavi:</strong>
-    <%= format_song(song.pallavi) %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Lyrics:</strong>
+    <strong class="block text-gray-500 mb-1">Lyrics:</strong>
     <%= format_song(song.lyrics) %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Movie:</strong>
-    <%= song.movie %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Year:</strong>
-    <%= song.year %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Letter:</strong>
-    <%= song.letter %>
   </div>
 </div>

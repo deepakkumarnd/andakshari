@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: var(--color-gray-700);
+  --color-letter: var(--color-gray-700);
+  --color-letter-light: var(--color-gray-500);
+  --color-border: var(--color-gray-400);
+  --color-heading: var(--color-gray-500);
+}

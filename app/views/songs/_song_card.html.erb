@@ -1,6 +1,6 @@
-<div class="relative border rounded-md p-4 w-full bg-gray-200 <%= match&.dig(:top_result) ? 'ring-2 ring-blue-500' : '' %>">
+<div class="relative border border-border rounded-2xl p-4 w-full bg-gray-50 flex flex-col <%= match&.dig(:top_result) ? 'ring-2 ring-gray-500' : '' %>">
   <div class="absolute top-2 right-2 flex gap-1">
-    <%= link_to edit_song_path(song), class: "p-1 rounded hover:bg-gray-300" do %>
+    <%= link_to edit_song_path(song), class: "p-1 rounded hover:bg-gray-300", data: { turbo_frame: "_top" } do %>
       <%= image_tag "edit.svg", class: "w-4 h-4", alt: "Edit" %>
     <% end %>
     <%= button_to song, method: :delete, class: "p-1 rounded hover:bg-gray-300 cursor-pointer", data: { turbo_confirm: "Are you sure?" } do %>
@@ -10,14 +10,16 @@
   <% if match %>
     <p class="text-xs text-gray-500 mb-2">
       <%= match[:match] %>% match
-      <% if match[:top_result] %><span class="ml-1 text-blue-600 font-semibold">Top result</span><% end %>
+      <% if match[:top_result] %><span class="ml-1 text-gray-700 font-semibold">Top result</span><% end %>
     </p>
   <% end %>
-  <%= link_to song_path(song), data: { turbo_frame: "_top" } do %>
-    <p class="text-4xl font-bold mb-2"><%= song.letter %></p>
-    <div>
-      <strong class="block font-medium mb-1">Pallavi:</strong>
+  <%= link_to song_path(song), class: "flex-1", data: { turbo_frame: "_top" } do %>
+    <p class="text-4xl font-bold mb-2 text-heading"><%= song.letter %></p>
+    <div class="prose prose-sm max-w-none text-letter">
       <%= format_song(song.pallavi) %>
     </div>
   <% end %>
+  <p class="text-sm text-letter-light mt-auto pt-3">
+    <%= [song.movie.presence, song.year.presence].compact.join(" · ") %>
+  </p>
 </div>
