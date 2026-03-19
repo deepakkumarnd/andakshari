@@ -1,0 +1,17 @@
+<div class="relative border rounded-md p-4 w-[300px] bg-gray-200">
+  <div class="absolute top-2 right-2 flex gap-1">
+    <%= link_to edit_song_path(song), class: "p-1 rounded hover:bg-gray-300" do %>
+      <%= image_tag "edit.svg", class: "w-4 h-4", alt: "Edit" %>
+    <% end %>
+    <%= button_to song, method: :delete, class: "p-1 rounded hover:bg-gray-300 cursor-pointer", data: { turbo_confirm: "Are you sure?" } do %>
+      <%= image_tag "trash.svg", class: "w-4 h-4", alt: "Destroy" %>
+    <% end %>
+  </div>
+  <%= link_to song_path(song) do %>
+    <p class="text-4xl font-bold mb-2"><%= song.letter %></p>
+    <div>
+      <strong class="block font-medium mb-1">Pallavi:</strong>
+      <%= format_song(song.pallavi) %>
+    </div>
+  <% end %>
+</div>
