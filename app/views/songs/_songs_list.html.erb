@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "songs_list" do %>
+  <div id="songs" class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
+    <% if @songs.any? %>
+      <% @songs.each do |song| %>
+        <%= render "song_card", song: song, match: @match_by_song_id&.dig(song.id) %>
+      <% end %>
+    <% else %>
+      <p class="text-center my-10">No songs found.</p>
+    <% end %>
+  </div>
+<% end %>

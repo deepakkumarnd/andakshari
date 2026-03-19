@@ -5,20 +5,14 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
+  <%= render "search_form" %>
+
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Songs</h1>
     <%= link_to "New song", new_song_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
 
   <div class="mt-5">
-    <div id="songs" class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
-      <% if @songs.any? %>
-        <% @songs.each do |song| %>
-          <%= render "song_card", song: song %>
-        <% end %>
-      <% else %>
-        <p class="text-center my-10">No songs found.</p>
-      <% end %>
-    </div>
+    <%= render "songs_list" %>
   </div>
 </div>
