@@ -10,8 +10,8 @@
     <%= link_to "New song", new_song_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
 
-  <div class="overflow-x-auto mt-5">
-    <div id="songs" class="min-w-full flex gap-5">
+  <div class="mt-5">
+    <div id="songs" class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
       <% if @songs.any? %>
         <% @songs.each do |song| %>
           <%= render "song_card", song: song %>
