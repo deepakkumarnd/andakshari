@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_31_102332) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_19_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,18 +19,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_31_102332) do
     t.text "label_en"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "songs_count"
   end
 
   create_table "songs", force: :cascade do |t|
     t.text "lyrics"
     t.text "movie"
     t.integer "year"
-    t.bigint "letter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["letter_id"], name: "index_songs_on_letter_id"
   end
-
-  add_foreign_key "songs", "letters"
 end
