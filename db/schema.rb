@@ -10,16 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_19_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_19_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-
-  create_table "letters", force: :cascade do |t|
-    t.text "letter"
-    t.text "label_en"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "songs", force: :cascade do |t|
     t.text "lyrics"
