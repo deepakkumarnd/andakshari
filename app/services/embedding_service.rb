@@ -1,5 +1,5 @@
-require 'net/http'
-require 'json'
+require "net/http"
+require "json"
 
 class EmbeddingService
   def self.embed_many(texts)

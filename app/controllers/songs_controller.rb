@@ -12,7 +12,7 @@ class SongsController < ApplicationController
     song_ids = results.map { |r| r[:song_id] }
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
     @songs = song_ids.filter_map { |id| songs_by_id[id] }
-    @match_by_song_id = results.to_h { |r| [r[:song_id], { match: r[:match], top_result: r[:top_result] }] }
+    @match_by_song_id = results.to_h { |r| [ r[:song_id], { match: r[:match], top_result: r[:top_result] } ] }
   end
 
   # GET /songs/1 or /songs/1.json

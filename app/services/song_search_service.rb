@@ -10,7 +10,7 @@ class SongSearchService
   end
 
   def search
-    embedding = EmbeddingService.embed_many([@query]).first
+    embedding = EmbeddingService.embed_many([ @query ]).first
 
     vector_results = vector_search(embedding)  # [{ song_id:, match: }]
     text_song_ids  = text_search_song_ids
@@ -20,7 +20,7 @@ class SongSearchService
 
     vector_results.map do |r|
       { song_id: r[:song_id], match: r[:match], top_result: both.include?(r[:song_id]) }
-    end.sort_by { |r| [r[:top_result] ? 0 : 1, -r[:match]] }
+    end.sort_by { |r| [ r[:top_result] ? 0 : 1, -r[:match] ] }
   end
 
   private
