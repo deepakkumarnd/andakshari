@@ -12,11 +12,6 @@
   <% end %>
 
   <div class="my-5">
-    <%= form.label "Choose letter" %>
-    <%= form.collection_select :letter_id, Letter.all.order(:id), :id, :letter, { prompt: "Select a letter" }, { class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": song.errors[:letter_id].none?, "border-red-400 focus:outline-red-600": song.errors[:letter_id].any?}] } %>
-  </div>
-
-  <div class="my-5">
     <%= form.label :lyrics %>
     <%= form.textarea :lyrics, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": song.errors[:lyrics].none?, "border-red-400 focus:outline-red-600": song.errors[:lyrics].any?}] %>
   </div>
