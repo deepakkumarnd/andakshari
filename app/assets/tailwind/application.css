@@ -6,4 +6,7 @@
   --color-letter-light: var(--color-gray-500);
   --color-border: var(--color-gray-400);
   --color-heading: var(--color-gray-500);
+  --font-lyrics: 'Noto Serif Malayalam', serif;
+  --font-malayalam: 'Noto Sans Malayalam', sans-serif;
+  --font-logo: 'Noto Serif Malayalam', serif;
 }
