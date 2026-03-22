@@ -8,7 +8,7 @@ class SongsController < ApplicationController
 
   # POST /songs/search
   def search
-    results = SongSearchService.search(params[:q])
+    results = SongSearchService.search(search_query)
     song_ids = results.map { |r| r[:song_id] }
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
     @songs = song_ids.filter_map { |id| songs_by_id[id] }
@@ -74,6 +74,19 @@ class SongsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_song
       @song = Song.find(params.expect(:id))
+    end
+
+    def search_query
+      if params[:audio].present?
+        begin
+          SarvamAudioService.speech_to_text(params[:audio].tempfile.path)
+        rescue => e
+          Rails.logger.error("SarvamAudioService error: #{e.message}")
+          ""
+        end
+      else
+        params[:q]
+      end
     end
 
     # Only allow a list of trusted parameters through.
