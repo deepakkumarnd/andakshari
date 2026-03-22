@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_19_000003) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_22_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_19_000003) do
     t.vector "embedding", limit: 768
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "to_tsvector('simple'::regconfig, content)", name: "index_chunks_on_content_fulltext", using: :gin
     t.index ["embedding"], name: "index_chunks_on_embedding", opclass: :vector_cosine_ops, using: :hnsw
     t.index ["song_id"], name: "index_chunks_on_song_id"
   end

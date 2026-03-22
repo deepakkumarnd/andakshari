@@ -6,21 +6,29 @@ class SongSearchService
   end
 
   def initialize(query)
-    @query = query
+    @query = query.to_s.strip
   end
 
   def search
+    return [] if @query.blank?
+
     embedding = EmbeddingService.embed_many([ @query ]).first
 
-    vector_results = vector_search(embedding)  # [{ song_id:, match: }]
-    text_song_ids  = text_search_song_ids
+    vector_results = vector_search(embedding)
+    text_results   = text_search_song_ids
 
-    vector_song_ids = vector_results.map { |r| r[:song_id] }
-    both = vector_song_ids & text_song_ids
+    text_song_ids = text_results.map { |r| r[:song_id] }
 
-    vector_results.map do |r|
-      { song_id: r[:song_id], match: r[:match], top_result: both.include?(r[:song_id]) }
-    end.sort_by { |r| [ r[:top_result] ? 0 : 1, -r[:match] ] }
+    merged = (text_results + vector_results)
+      .group_by { |r| r[:song_id] }
+      .map { |song_id, results| { song_id: song_id, match: results.map { |r| r[:match] }.max, text_match: text_song_ids.include?(song_id) } }
+      .sort_by { |r| [ r[:text_match] ? 0 : 1, -r[:match] ] }
+
+    top_match = merged.first&.dig(:match)
+
+    merged.map do |r|
+      r.merge(top_result: r[:match] == top_match).except(:text_match)
+    end
   end
 
   private
@@ -41,6 +49,18 @@ class SongSearchService
   end
 
   def text_search_song_ids
-    Chunk.where("content ILIKE ?", "%#{@query}%").distinct.limit(TOP_K).pluck(:song_id)
+    tsquery = Chunk.sanitize_sql_like(@query).split.map { |w| "'#{w}':*" }.join(" & ")
+    sql = <<~SQL
+      SELECT song_id,
+             ROUND((MAX(ts_rank(to_tsvector('simple', content), to_tsquery('simple', #{Chunk.connection.quote(tsquery)}))) * 100)::numeric, 2) AS match
+      FROM chunks
+      WHERE to_tsvector('simple', content) @@ to_tsquery('simple', #{Chunk.connection.quote(tsquery)})
+      GROUP BY song_id
+      ORDER BY match DESC
+      LIMIT #{TOP_K}
+    SQL
+    Chunk.connection.select_all(sql).map do |row|
+      { song_id: row["song_id"], match: row["match"].to_f }
+    end
   end
 end

@@ -20,10 +20,12 @@ class Song < ApplicationRecord
 
   def create_chunks
     chunks.destroy_all
-    lines = lyrics.split("\n").map(&:strip).reject { |l| l.blank? || l.split.length < 3 }
-    return if lines.empty?
+    paragraphs = lyrics.split(/\n{2,}/).map(&:strip).reject(&:blank?)
+    groups = paragraphs.flat_map { |p| p.split("\n").map(&:strip).reject(&:blank?).each_slice(4).map { |g| g.join("\n") } }
+    groups.reject! { |g| g.split.length < 3 }
+    return if groups.empty?
 
-    contents = lines.map { |line| "#{line} #{movie}" }
+    contents = groups.map { |group| "#{group} | #{movie} | #{year}" }
     embeddings = EmbeddingService.embed_many(contents)
 
     chunk_records = contents.each_with_index.map do |content, i|
