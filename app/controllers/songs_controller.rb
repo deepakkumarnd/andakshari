@@ -78,13 +78,17 @@ class SongsController < ApplicationController
 
     def search_query
       if params[:audio].present?
+        Rails.logger.info("SarvamAudioService: transcribing audio, original_filename=#{params[:audio].original_filename}, content_type=#{params[:audio].content_type}, path=#{params[:audio].tempfile.path}")
         begin
-          SarvamAudioService.speech_to_text(params[:audio].tempfile.path)
+          transcript = SarvamAudioService.speech_to_text(params[:audio].tempfile.path, content_type: params[:audio].content_type)
+          Rails.logger.info("SarvamAudioService: transcript=#{transcript.inspect}")
+          transcript
         rescue => e
           Rails.logger.error("SarvamAudioService error: #{e.message}")
           ""
         end
       else
+        Rails.logger.info("SarvamAudioService: no audio param, using q=#{params[:q].inspect}")
         params[:q]
       end
     end
