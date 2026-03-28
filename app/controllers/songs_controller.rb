@@ -1,5 +1,5 @@
 class SongsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[ index search ]
+  skip_before_action :authenticate_user!, only: %i[ index search suggest ]
   before_action :set_song, only: %i[ show edit update destroy like unlike ]
 
   # GET /songs or /songs.json
@@ -16,6 +16,12 @@ class SongsController < ApplicationController
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
     @songs = song_ids.filter_map { |id| songs_by_id[id] }
     @match_by_song_id = results.to_h { |r| [ r[:song_id], { match: r[:match], top_result: r[:top_result] } ] }
+  end
+
+  # GET /songs/suggest
+  def suggest
+    authorize Song, :search?
+    @suggestions = SongSearchService.suggest(params[:q])
   end
 
   # GET /songs/1 or /songs/1.json

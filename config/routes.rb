@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :songs do
     collection do
       post :search
+      get :suggest
     end
     member do
       post :like

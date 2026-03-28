@@ -5,6 +5,17 @@ class SongSearchService
     new(query, starting_letter: starting_letter).search
   end
 
+  def self.suggest(query)
+    query = query.to_s.strip
+    return [] if query.blank?
+
+    song_ids = Chunk.where("content ILIKE ?", "%#{Chunk.sanitize_sql_like(query)}%")
+      .select(:song_id).distinct.limit(TOP_K).pluck(:song_id)
+    Song.where(id: song_ids).map do |song|
+      { id: song.id, pallavi: song.pallavi.to_s.truncate(80), movie: song.movie, start_letter: song.start_letter }
+    end
+  end
+
   def initialize(query, starting_letter: nil)
     @query = query.to_s.strip
     @starting_letter = starting_letter

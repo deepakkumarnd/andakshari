@@ -1,5 +1,8 @@
 <%= form_with url: search_songs_path, method: :post, data: { turbo_stream: true }, class: "flex items-center gap-2 mb-6 w-full max-w-2xl mx-auto" do |f| %>
-  <%= f.search_field :q, placeholder: "Search songs...", class: "w-full rounded-md border border-gray-300 px-4 py-3 text-lg focus:outline-gray-500" %>
+  <div class="relative w-full" data-controller="search-suggest" data-search-suggest-url-value="<%= suggest_songs_path %>" data-action="click@window->search-suggest#clickOutside">
+    <%= f.search_field :q, placeholder: "Search songs...", data: { search_suggest_target: "input", action: "input->search-suggest#onInput" }, class: "w-full rounded-md border border-gray-300 px-4 py-3 text-lg focus:outline-gray-500" %>
+    <ul id="search_suggestions" data-search-suggest-target="suggestions" class="hidden absolute z-20 w-full bg-white border border-gray-300 rounded-md mt-1 shadow-lg max-h-80 overflow-y-auto"></ul>
+  </div>
   <button type="submit" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
     <%= image_tag "search.svg", class: "w-6 h-6 invert", alt: "Search" %>
   </button>
