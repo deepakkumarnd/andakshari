@@ -1,4 +1,4 @@
-<div class="relative border border-border rounded-2xl p-4 w-full bg-gray-50 flex flex-col <%= match&.dig(:top_result) ? 'ring-2 ring-gray-500' : '' %>">
+<div class="relative border border-border rounded-2xl p-4 w-full bg-gray-50 flex flex-col hover:ring-2 hover:ring-gray-400 transition-shadow duration-150 <%= match&.dig(:top_result) ? 'ring-2 ring-gray-500' : '' %>">
   <% if policy(song).update? || policy(song).destroy? %>
     <div class="absolute top-2 right-2 flex gap-1">
       <% if policy(song).update? %>
