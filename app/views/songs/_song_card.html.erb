@@ -14,7 +14,7 @@
     </p>
   <% end %>
   <%= link_to song_path(song), class: "flex-1", data: { turbo_frame: "_top" } do %>
-    <p class="text-2xl font-bold mb-2 text-heading font-logo"><%= song.letter %></p>
+    <p class="text-2xl font-bold mb-2 text-heading font-logo"><%= song.start_letter %></p>
     <div class="prose prose-sm max-w-none text-letter font-malayalam">
       <%= format_song(song.pallavi) %>
     </div>

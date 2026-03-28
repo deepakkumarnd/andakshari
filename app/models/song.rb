@@ -1,6 +1,7 @@
 class Song < ApplicationRecord
   has_many :chunks, dependent: :destroy
 
+  before_save :set_start_letter
   after_save :create_chunks, if: -> { saved_change_to_lyrics? || saved_change_to_movie? }
 
   def cleanup!
@@ -8,15 +9,19 @@ class Song < ApplicationRecord
     self.movie = self.movie.strip
   end
 
-  def letter
-    lyrics&.strip&.[](0)
-  end
-
   def pallavi
     self.lyrics.split("\n")[0..4].join("\n")
   end
 
   private
+
+  def letter
+    lyrics&.strip&.[](0)
+  end
+
+  def set_start_letter
+    self.start_letter = letter
+  end
 
   def create_chunks
     chunks.destroy_all
