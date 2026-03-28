@@ -34,7 +34,11 @@
   <% end %>
   <div class="flex items-center justify-between mt-auto pt-3">
     <p class="text-sm text-letter-light">
-      <%= [song.movie.presence, song.year.presence].compact.join(" · ") %>
+      <%= song.movie.presence %>
+      <% if song.movie.present? && song.year.present? %> · <% end %>
+      <% if song.year.present? %>
+        <%= link_to song.year, search_by_year_songs_path(year: song.year), class: "hover:text-gray-700 transition-colors", data: { turbo_frame: "_top" } %>
+      <% end %>
     </p>
     <%= render "like_button", song: song %>
   </div>

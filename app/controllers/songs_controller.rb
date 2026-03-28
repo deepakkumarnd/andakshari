@@ -1,5 +1,5 @@
 class SongsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[ index search search_by_tag ]
+  skip_before_action :authenticate_user!, only: %i[ index search search_by_tag search_by_year ]
   before_action :set_song, only: %i[ show edit update destroy like unlike ]
 
   PAGE_SIZE = 10
@@ -19,6 +19,13 @@ class SongsController < ApplicationController
     all_songs = song_ids.filter_map { |id| songs_by_id[id] }
     @match_by_song_id = results.to_h { |r| [ r[:song_id], { match: r[:match], top_result: r[:top_result] } ] }
     @pagy, @songs = pagy(all_songs, limit: PAGE_SIZE)
+  end
+
+  # GET /songs/search_by_year?year=1990
+  def search_by_year
+    authorize Song, :search?
+    @year = params[:year].to_i
+    @pagy, @songs = pagy(SongSearchService.search_by_year(@year), limit: PAGE_SIZE)
   end
 
   # GET /songs/search_by_tag?tag=devotional

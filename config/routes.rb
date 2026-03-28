@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post :search
       get :suggest
       get :search_by_tag
+      get :search_by_year
     end
     member do
       post :like

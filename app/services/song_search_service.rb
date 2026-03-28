@@ -5,6 +5,10 @@ class SongSearchService
     new(query, starting_letter: starting_letter).search
   end
 
+  def self.search_by_year(year)
+    Song.where(year: year.to_i)
+  end
+
   def self.search_by_tag(tag_name)
     tag = Tag.find_by("name ILIKE ?", tag_name.to_s.strip)
     return Song.none unless tag

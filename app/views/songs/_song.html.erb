@@ -7,7 +7,7 @@
     <% end %>
     <% if song.year.present? %>
       <span class="text-gray-300">|</span>
-      <span><strong>Year:</strong> <%= song.year %></span>
+      <span><strong>Year:</strong> <%= link_to song.year, search_by_year_songs_path(year: song.year), class: "hover:text-gray-700 transition-colors" %></span>
     <% end %>
   </p>
   <% if song.tags.any? %>

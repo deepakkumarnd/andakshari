@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_28_150000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_28_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -57,6 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_150000) do
     t.bigint "user_id"
     t.index ["start_letter"], name: "index_songs_on_start_letter"
     t.index ["user_id"], name: "index_songs_on_user_id"
+    t.index ["year"], name: "index_songs_on_year"
   end
 
   create_table "tags", force: :cascade do |t|
