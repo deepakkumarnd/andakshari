@@ -3,7 +3,7 @@
   <button type="submit" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
     <%= image_tag "search.svg", class: "w-6 h-6 invert", alt: "Search" %>
   </button>
-  <div data-controller="audio-search" data-audio-search-url="<%= search_songs_path %>" class="relative flex items-center">
+  <div data-controller="audio-search" data-audio-search-url="<%= search_songs_path %>" class="relative flex items-center shrink-0">
     <button type="button" data-audio-search-target="button" data-action="audio-search#toggle" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
       <%= image_tag "mic.svg", class: "w-6 h-6 invert", alt: "Record" %>
     </button>
