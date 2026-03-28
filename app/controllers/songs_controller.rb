@@ -1,13 +1,16 @@
 class SongsController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[ index search ]
   before_action :set_song, only: %i[ show edit update destroy ]
 
   # GET /songs or /songs.json
   def index
+    authorize Song
     @songs = Song.all
   end
 
   # POST /songs/search
   def search
+    authorize Song
     results = SongSearchService.search(search_query)
     song_ids = results.map { |r| r[:song_id] }
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
@@ -17,6 +20,7 @@ class SongsController < ApplicationController
 
   # GET /songs/1 or /songs/1.json
   def show
+    authorize @song
     results = SongSearchService.search("", starting_letter: @song.start_letter)
     song_ids = results.map { |r| r[:song_id] }.reject { |id| id == @song.id }.first(10)
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
@@ -26,15 +30,18 @@ class SongsController < ApplicationController
   # GET /songs/new
   def new
     @song = Song.new
+    authorize @song
   end
 
   # GET /songs/1/edit
   def edit
+    authorize @song
   end
 
   # POST /songs or /songs.json
   def create
     @song = Song.new(song_params)
+    authorize @song
     @song.cleanup!
 
     respond_to do |format|
@@ -50,6 +57,7 @@ class SongsController < ApplicationController
 
   # PATCH/PUT /songs/1 or /songs/1.json
   def update
+    authorize @song
     @song.assign_attributes(song_params)
     @song.cleanup!
 
@@ -66,6 +74,7 @@ class SongsController < ApplicationController
 
   # DELETE /songs/1 or /songs/1.json
   def destroy
+    authorize @song
     @song.destroy!
 
     respond_to do |format|

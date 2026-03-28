@@ -10,14 +10,20 @@
       <%= link_to songs_path, class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800" do %>
         &larr; Back to songs
       <% end %>
-      <div class="flex items-center gap-2">
-        <%= link_to edit_song_path(@song), class: "p-1 rounded hover:bg-gray-200" do %>
-          <%= image_tag "edit.svg", class: "w-5 h-5", alt: "Edit" %>
-        <% end %>
-        <%= button_to @song, method: :delete, class: "p-1 rounded hover:bg-gray-200 cursor-pointer", data: { turbo_confirm: "Are you sure?" } do %>
-          <%= image_tag "trash.svg", class: "w-5 h-5", alt: "Destroy" %>
-        <% end %>
-      </div>
+      <% if policy(@song).update? || policy(@song).destroy? %>
+        <div class="flex items-center gap-2">
+          <% if policy(@song).update? %>
+            <%= link_to edit_song_path(@song), class: "p-1 rounded hover:bg-gray-200" do %>
+              <%= image_tag "edit.svg", class: "w-5 h-5", alt: "Edit" %>
+            <% end %>
+          <% end %>
+          <% if policy(@song).destroy? %>
+            <%= button_to @song, method: :delete, class: "p-1 rounded hover:bg-gray-200 cursor-pointer", data: { turbo_confirm: "Are you sure?" } do %>
+              <%= image_tag "trash.svg", class: "w-5 h-5", alt: "Destroy" %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
     <%= render @song %>
