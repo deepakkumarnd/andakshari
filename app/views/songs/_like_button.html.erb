@@ -1,0 +1,15 @@
+<%= turbo_frame_tag dom_id(song, :like) do %>
+  <div class="inline-flex items-center gap-1">
+    <% if user_signed_in? %>
+      <% liked = current_user.likes.exists?(song_id: song.id) %>
+      <%= button_to liked ? unlike_song_path(song) : like_song_path(song),
+          method: liked ? :delete : :post,
+          class: "p-1 rounded hover:bg-gray-200 cursor-pointer text-red-500" do %>
+        <%= image_tag liked ? "heart-filled.svg" : "heart.svg", class: "w-5 h-5 text-red-500", style: "color: #ef4444;", alt: liked ? "Unlike" : "Like" %>
+      <% end %>
+    <% else %>
+      <%= image_tag "heart.svg", class: "w-5 h-5", style: "color: #9ca3af;", alt: "Likes" %>
+    <% end %>
+    <span class="text-sm text-gray-500"><%= song.likes_count %></span>
+  </div>
+<% end %>

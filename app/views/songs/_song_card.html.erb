@@ -25,7 +25,10 @@
       <%= format_song(song.pallavi) %>
     </div>
   <% end %>
-  <p class="text-sm text-letter-light mt-auto pt-3">
-    <%= [song.movie.presence, song.year.presence].compact.join(" · ") %>
-  </p>
+  <div class="flex items-center justify-between mt-auto pt-3">
+    <p class="text-sm text-letter-light">
+      <%= [song.movie.presence, song.year.presence].compact.join(" · ") %>
+    </p>
+    <%= render "like_button", song: song %>
+  </div>
 </div>

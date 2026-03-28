@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_28_123440) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_28_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -26,6 +26,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_123440) do
     t.index ["song_id"], name: "index_chunks_on_song_id"
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "song_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["song_id"], name: "index_likes_on_song_id"
+    t.index ["user_id", "song_id"], name: "index_likes_on_user_id_and_song_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
   create_table "songs", force: :cascade do |t|
     t.text "lyrics"
     t.text "movie"
@@ -33,6 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_123440) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "start_letter"
+    t.integer "likes_count", default: 0, null: false
     t.index ["start_letter"], name: "index_songs_on_start_letter"
   end
 
@@ -53,4 +64,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_123440) do
   end
 
   add_foreign_key "chunks", "songs"
+  add_foreign_key "likes", "songs"
+  add_foreign_key "likes", "users"
 end

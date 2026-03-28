@@ -27,6 +27,10 @@
     </div>
 
     <%= render @song %>
+
+    <div class="mt-4">
+      <%= render "like_button", song: @song %>
+    </div>
   </div>
 
   <% if @related_songs.any? %>

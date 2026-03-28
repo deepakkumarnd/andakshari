@@ -1,6 +1,6 @@
 class SongsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[ index search ]
-  before_action :set_song, only: %i[ show edit update destroy ]
+  before_action :set_song, only: %i[ show edit update destroy like unlike ]
 
   # GET /songs or /songs.json
   def index
@@ -69,6 +69,26 @@ class SongsController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @song.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  # POST /songs/1/like
+  def like
+    current_user.likes.find_or_create_by(song: @song)
+    @song.reload
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @song }
+    end
+  end
+
+  # DELETE /songs/1/unlike
+  def unlike
+    current_user.likes.find_by(song: @song)&.destroy
+    @song.reload
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @song }
     end
   end
 

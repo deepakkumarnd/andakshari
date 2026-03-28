@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :rememberable, :trackable, :validatable
 
+  has_many :likes, dependent: :destroy
+  has_many :liked_songs, through: :likes, source: :song
+
   OTP_VALIDITY = 10.minutes
 
   def generate_otp!

@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     collection do
       post :search
     end
+    member do
+      post :like
+      delete :unlike
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
