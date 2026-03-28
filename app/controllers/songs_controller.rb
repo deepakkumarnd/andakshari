@@ -47,6 +47,7 @@ class SongsController < ApplicationController
   # POST /songs or /songs.json
   def create
     @song = Song.new(song_params)
+    @song.user = current_user
     authorize @song
     @song.cleanup!
 

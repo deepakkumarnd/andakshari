@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_28_140000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_28_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -54,7 +54,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_140000) do
     t.datetime "updated_at", null: false
     t.string "start_letter"
     t.integer "likes_count", default: 0, null: false
+    t.bigint "user_id"
     t.index ["start_letter"], name: "index_songs_on_start_letter"
+    t.index ["user_id"], name: "index_songs_on_user_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -85,4 +87,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_140000) do
   add_foreign_key "likes", "users"
   add_foreign_key "song_tags", "songs"
   add_foreign_key "song_tags", "tags"
+  add_foreign_key "songs", "users"
 end

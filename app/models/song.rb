@@ -1,4 +1,5 @@
 class Song < ApplicationRecord
+  belongs_to :user, optional: true
   has_many :chunks, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liked_by_users, through: :likes, source: :user

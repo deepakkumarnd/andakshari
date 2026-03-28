@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :rememberable, :trackable, :validatable
 
+  has_many :songs, dependent: :nullify
   has_many :likes, dependent: :destroy
   has_many :liked_songs, through: :likes, source: :song
 
