@@ -1,5 +1,5 @@
 class SongsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[ index search suggest ]
+  skip_before_action :authenticate_user!, only: %i[ index search ]
   before_action :set_song, only: %i[ show edit update destroy like unlike ]
 
   # GET /songs or /songs.json
