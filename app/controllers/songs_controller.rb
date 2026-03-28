@@ -46,6 +46,7 @@ class SongsController < ApplicationController
 
     respond_to do |format|
       if @song.save
+        update_tags(@song)
         format.html { redirect_to @song, notice: "Song was successfully created." }
         format.json { render :show, status: :created, location: @song }
       else
@@ -63,6 +64,7 @@ class SongsController < ApplicationController
 
     respond_to do |format|
       if @song.save
+        update_tags(@song)
         format.html { redirect_to @song, notice: "Song was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @song }
       else
@@ -124,6 +126,13 @@ class SongsController < ApplicationController
         Rails.logger.info("SarvamAudioService: no audio param, using q=#{params[:q].inspect}")
         params[:q]
       end
+    end
+
+    def update_tags(song)
+      tag_list = params[:song]&.[](:tag_list)
+      tag_names = Array(tag_list).select { |n| n.is_a?(String) && n.match?(/\A[a-zA-Z0-9]+\z/) }
+      tags = tag_names.map { |name| Tag.find_or_create_by!(name: name) }
+      song.tags = tags
     end
 
     # Only allow a list of trusted parameters through.

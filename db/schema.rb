@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_28_130000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_28_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -36,6 +36,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_130000) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "song_tags", force: :cascade do |t|
+    t.bigint "song_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["song_id", "tag_id"], name: "index_song_tags_on_song_id_and_tag_id", unique: true
+    t.index ["song_id"], name: "index_song_tags_on_song_id"
+    t.index ["tag_id"], name: "index_song_tags_on_tag_id"
+  end
+
   create_table "songs", force: :cascade do |t|
     t.text "lyrics"
     t.text "movie"
@@ -45,6 +55,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_130000) do
     t.string "start_letter"
     t.integer "likes_count", default: 0, null: false
     t.index ["start_letter"], name: "index_songs_on_start_letter"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -66,4 +83,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_130000) do
   add_foreign_key "chunks", "songs"
   add_foreign_key "likes", "songs"
   add_foreign_key "likes", "users"
+  add_foreign_key "song_tags", "songs"
+  add_foreign_key "song_tags", "tags"
 end

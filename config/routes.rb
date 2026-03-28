@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     sessions: "users/sessions",
     registrations: "users/registrations"
   }
+  resources :tags, only: :index
   resources :songs do
     collection do
       post :search

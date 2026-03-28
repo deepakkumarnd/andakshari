@@ -2,6 +2,8 @@ class Song < ApplicationRecord
   has_many :chunks, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liked_by_users, through: :likes, source: :user
+  has_many :song_tags, dependent: :destroy
+  has_many :tags, through: :song_tags
 
   before_save :set_start_letter
   after_save :create_chunks, if: -> { saved_change_to_lyrics? || saved_change_to_movie? }
