@@ -17,6 +17,10 @@ class SongsController < ApplicationController
 
   # GET /songs/1 or /songs/1.json
   def show
+    results = SongSearchService.search("", starting_letter: @song.start_letter)
+    song_ids = results.map { |r| r[:song_id] }.reject { |id| id == @song.id }.first(10)
+    songs_by_id = Song.where(id: song_ids).index_by(&:id)
+    @related_songs = song_ids.filter_map { |id| songs_by_id[id] }
   end
 
   # GET /songs/new

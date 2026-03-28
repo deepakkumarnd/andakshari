@@ -1,15 +1,17 @@
 class SongSearchService
   TOP_K = 5
 
-  def self.search(query)
-    new(query).search
+  def self.search(query, starting_letter: nil)
+    new(query, starting_letter: starting_letter).search
   end
 
-  def initialize(query)
+  def initialize(query, starting_letter: nil)
     @query = query.to_s.strip
+    @starting_letter = starting_letter
   end
 
   def search
+    return search_by_letter if @starting_letter.present?
     return [] if @query.blank?
 
     embedding = EmbeddingService.embed_many([ @query ]).first
@@ -32,6 +34,12 @@ class SongSearchService
   end
 
   private
+
+  def search_by_letter
+    Song.where(start_letter: @starting_letter).pluck(:id).map do |id|
+      { song_id: id, match: 100.0, top_result: false }
+    end
+  end
 
   def vector_search(embedding)
     vector_literal = "[#{embedding.join(',')}]"
