@@ -28,7 +28,7 @@
   <% if song.tags.any? %>
     <div class="flex flex-wrap gap-1 mt-2">
       <% song.tags.each do |tag| %>
-        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-md"><%= tag.name %></span>
+        <%= link_to tag.name, search_by_tag_songs_path(tag: tag.name), class: "text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-md hover:bg-gray-300 transition-colors", data: { turbo_frame: "_top" } %>
       <% end %>
     </div>
   <% end %>

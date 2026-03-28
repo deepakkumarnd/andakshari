@@ -1,11 +1,13 @@
 class SongsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[ index search ]
+  skip_before_action :authenticate_user!, only: %i[ index search search_by_tag ]
   before_action :set_song, only: %i[ show edit update destroy like unlike ]
+
+  PAGE_SIZE = 10
 
   # GET /songs or /songs.json
   def index
     authorize Song
-    @songs = Song.all
+    @pagy, @songs = pagy(Song.all, limit: PAGE_SIZE)
   end
 
   # POST /songs/search
@@ -14,8 +16,16 @@ class SongsController < ApplicationController
     results = SongSearchService.search(search_query)
     song_ids = results.map { |r| r[:song_id] }
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
-    @songs = song_ids.filter_map { |id| songs_by_id[id] }
+    all_songs = song_ids.filter_map { |id| songs_by_id[id] }
     @match_by_song_id = results.to_h { |r| [ r[:song_id], { match: r[:match], top_result: r[:top_result] } ] }
+    @pagy, @songs = pagy(all_songs, limit: PAGE_SIZE)
+  end
+
+  # GET /songs/search_by_tag?tag=devotional
+  def search_by_tag
+    authorize Song, :search?
+    @tag = params[:tag].to_s.strip
+    @pagy, @songs = pagy(SongSearchService.search_by_tag(@tag), limit: PAGE_SIZE)
   end
 
   # GET /songs/suggest

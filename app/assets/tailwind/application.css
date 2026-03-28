@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+nav.pagy a {
+  @apply inline-flex items-center justify-center w-9 h-9 rounded-full text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-100 transition-colors mx-1;
+}
+
+nav.pagy a[aria-current="page"] {
+  @apply bg-gray-700 text-white border-gray-700 pointer-events-none rounded-full;
+}
+
+nav.pagy a[role="separator"] {
+  @apply border-0 hover:bg-transparent text-gray-400 pointer-events-none;
+}
+
 @theme {
   --color-primary: var(--color-gray-700);
   --color-letter: var(--color-gray-700);

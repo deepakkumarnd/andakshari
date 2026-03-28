@@ -1,0 +1,13 @@
+<% content_for :title, "Songs tagged: #{@tag}" %>
+
+<div class="w-full">
+  <%= render "search_form" %>
+
+  <h1 class="font-bold text-4xl text-heading mb-5">
+    Songs tagged <span class="text-primary">#<%= @tag %></span>
+  </h1>
+
+  <div class="mt-5">
+    <%= render "songs_list" %>
+  </div>
+</div>

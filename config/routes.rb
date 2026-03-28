@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     collection do
       post :search
       get :suggest
+      get :search_by_tag
     end
     member do
       post :like
