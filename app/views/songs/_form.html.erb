@@ -13,17 +13,27 @@
 
   <div class="my-5">
     <%= form.label :lyrics %>
-    <%= form.textarea :lyrics, rows: 20, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-gray-600": song.errors[:lyrics].none?, "border-red-400 focus:outline-red-600": song.errors[:lyrics].any?}] %>
+    <div data-controller="transliterate">
+      <div class="flex items-center gap-2 mt-2 mb-1">
+        <button type="button" data-transliterate-target="button" data-action="click->transliterate#toggle"
+                class="text-xs px-2 py-1 rounded border border-gray-300 bg-white text-gray-600 font-medium leading-none">en→മ</button>
+        <button type="button" data-action="click->transliterate#convertAll"
+                class="text-xs px-2 py-1 rounded border border-gray-300 bg-white text-gray-600 font-medium leading-none hover:bg-gray-100">Convert all</button>
+      </div>
+      <%= form.textarea :lyrics, rows: 20,
+          data: { transliterate_target: "input", action: "keydown->transliterate#onKeydown" },
+          class: ["block shadow-sm rounded-md border px-3 py-2 w-full", {"border-gray-400": song.errors[:lyrics].none?, "border-red-400": song.errors[:lyrics].any?}] %>
+    </div>
   </div>
 
   <div class="my-5">
     <%= form.label :movie %>
-    <%= form.text_field :movie, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-gray-600": song.errors[:movie].none?, "border-red-400 focus:outline-red-600": song.errors[:movie].any?}] %>
+    <%= form.text_field :movie, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400": song.errors[:movie].none?, "border-red-400": song.errors[:movie].any?}] %>
   </div>
 
   <div class="my-5">
     <%= form.label :year %>
-    <%= form.number_field :year, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-gray-600": song.errors[:year].none?, "border-red-400 focus:outline-red-600": song.errors[:year].any?}] %>
+    <%= form.number_field :year, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400": song.errors[:year].none?, "border-red-400": song.errors[:year].any?}] %>
   </div>
 
   <%= tag_input(field_name: "song[tag_list][]", current_tags: song.tags.map(&:name)) %>

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 0 !important;
+  border-color: var(--color-primary) !important;
+}
+
 nav.pagy a {
   @apply inline-flex items-center justify-center w-9 h-9 rounded-full text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-100 transition-colors mx-1;
 }

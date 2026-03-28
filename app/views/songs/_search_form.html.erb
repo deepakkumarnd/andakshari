@@ -1,24 +1,37 @@
-<%= form_with url: search_songs_path, method: :post, data: { turbo_stream: true }, class: "flex items-center gap-2 mb-6 w-full max-w-2xl mx-auto" do |f| %>
-  <% if user_signed_in? %>
-    <div class="relative w-full" data-controller="search-suggest" data-search-suggest-url-value="<%= suggest_songs_path %>" data-action="click@window->search-suggest#clickOutside">
-      <%= f.search_field :q, placeholder: "Search songs...", data: { search_suggest_target: "input", action: "input->search-suggest#onInput" }, class: "w-full rounded-md border border-gray-300 px-4 py-3 text-lg focus:outline-gray-500" %>
-      <ul id="search_suggestions" data-search-suggest-target="suggestions" class="hidden absolute z-20 w-full bg-white border border-gray-300 rounded-md mt-1 shadow-lg max-h-80 overflow-y-auto"></ul>
-    </div>
-  <% else %>
-    <%= f.search_field :q, placeholder: "Search songs...", class: "w-full rounded-md border border-gray-300 px-4 py-3 text-lg focus:outline-gray-500" %>
-  <% end %>
-  <button type="submit" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
-    <%= image_tag "search.svg", class: "w-6 h-6 invert", alt: "Search" %>
-  </button>
-  <% if user_signed_in? %>
-    <div data-controller="audio-search" data-audio-search-url="<%= search_songs_path %>" class="relative flex items-center shrink-0">
-      <button type="button" data-audio-search-target="button" data-action="audio-search#toggle" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
-        <%= image_tag "mic.svg", class: "w-6 h-6 invert", alt: "Record" %>
+<%= form_with url: search_songs_path, method: :post,
+    data: { turbo_stream: true, controller: "transliterate" },
+    class: "flex flex-col gap-2 mb-6 w-full max-w-2xl mx-auto" do |f| %>
+  <div class="flex items-center gap-2">
+    <% if user_signed_in? %>
+      <div class="relative w-full" data-controller="search-suggest" data-search-suggest-url-value="<%= suggest_songs_path %>" data-action="click@window->search-suggest#clickOutside">
+        <%= f.search_field :q, placeholder: "Search songs...", data: { search_suggest_target: "input", transliterate_target: "input", action: "input->search-suggest#onInput keydown->transliterate#onKeydown" }, class: "w-full rounded-md border border-gray-300 px-4 py-3 text-lg" %>
+        <ul id="search_suggestions" data-search-suggest-target="suggestions" class="hidden absolute z-20 w-full bg-white border border-gray-300 rounded-md mt-1 shadow-lg max-h-80 overflow-y-auto"></ul>
+      </div>
+    <% else %>
+      <%= f.search_field :q, placeholder: "Search songs...", data: { transliterate_target: "input", action: "keydown->transliterate#onKeydown" }, class: "w-full rounded-md border border-gray-300 px-4 py-3 text-lg" %>
+    <% end %>
+    <button type="submit" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
+      <%= image_tag "search.svg", class: "w-6 h-6 invert", alt: "Search" %>
+    </button>
+    <% if user_signed_in? %>
+      <div data-controller="audio-search" data-audio-search-url="<%= search_songs_path %>" class="relative flex items-center shrink-0">
+        <button type="button" data-audio-search-target="button" data-action="audio-search#toggle" class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 text-white flex-shrink-0">
+          <%= image_tag "mic.svg", class: "w-6 h-6 invert", alt: "Record" %>
+        </button>
+        <span data-audio-search-target="timer" class="hidden absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-red-600 font-semibold"></span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex items-center justify-between px-2">
+    <div class="flex items-center gap-2">
+      <button type="button" role="switch" aria-checked="true"
+              data-transliterate-target="button" data-action="click->transliterate#toggle"
+              class="relative inline-flex w-9 h-5 rounded-full bg-gray-700 transition-colors duration-200 focus:outline-none flex-shrink-0">
+        <span class="inline-block w-4 h-4 mt-0.5 ml-0.5 rounded-full bg-white shadow transform transition-transform duration-200 translate-x-4"></span>
       </button>
-      <span data-audio-search-target="timer" class="hidden absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-red-600 font-semibold"></span>
+      <span class="text-sm text-gray-500">Type in English, convert to Malayalam (en→മ)</span>
     </div>
-  <% end %>
-  <%= link_to songs_path, class: "p-3 rounded-md bg-gray-200 hover:bg-gray-300 flex-shrink-0", title: "Clear search" do %>
-    <%= image_tag "x-mark.svg", class: "w-6 h-6", alt: "Clear" %>
-  <% end %>
+    <%= link_to "Clear search", songs_path, class: "text-sm text-gray-500 hover:text-gray-800" %>
+  </div>
 <% end %>
