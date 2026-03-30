@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       resources :edit_log_comments, only: :create
     end
   end
-  resources :notifications, only: [:show]
+  resources :notifications, only: [ :show ]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
