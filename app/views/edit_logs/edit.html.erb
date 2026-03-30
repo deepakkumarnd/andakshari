@@ -1,0 +1,12 @@
+<% content_for :title, "Edit suggestion" %>
+
+<div class="w-full md:w-2/3">
+  <%= link_to song_edit_log_path(@song, @edit_log), class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-6 block" do %>
+    &larr; Back to suggestion
+  <% end %>
+
+  <h1 class="font-bold text-3xl text-heading mb-2">Update your suggestion</h1>
+  <p class="text-gray-500 mb-6">Editing your suggestion for <strong><%= @edit_log.field %></strong>. The song creator will review the updated suggestion.</p>
+
+  <%= render "form", song: @song, edit_log: @edit_log, submit_label: "Update suggestion" %>
+</div>

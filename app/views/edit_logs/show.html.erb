@@ -57,14 +57,18 @@
     </div>
   <% end %>
 
-  <% if policy(@edit_log).approve? %>
-    <div class="flex gap-3">
+  <div class="flex gap-3">
+    <% if policy(@edit_log).approve? %>
       <%= button_to "Approve & apply", approve_song_edit_log_path(@song, @edit_log),
             method: :post,
             class: "px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white font-medium cursor-pointer" %>
       <%= button_to "Reject", reject_song_edit_log_path(@song, @edit_log),
             method: :post,
             class: "px-4 py-2 rounded-md bg-white hover:bg-gray-100 text-gray-700 font-medium border border-gray-300 cursor-pointer" %>
-    </div>
-  <% end %>
+    <% end %>
+    <% if policy(@edit_log).edit? %>
+      <%= link_to "Edit suggestion", edit_song_edit_log_path(@song, @edit_log),
+            class: "px-4 py-2 rounded-md bg-white hover:bg-gray-100 text-gray-700 font-medium border border-gray-300" %>
+    <% end %>
+  </div>
 </div>

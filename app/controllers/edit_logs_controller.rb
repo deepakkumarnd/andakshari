@@ -1,6 +1,6 @@
 class EditLogsController < ApplicationController
   before_action :set_song
-  before_action :set_edit_log, only: %i[show approve reject]
+  before_action :set_edit_log, only: %i[show edit update approve reject]
 
   def index
     @edit_log = EditLog.new(song: @song)
@@ -28,6 +28,19 @@ class EditLogsController < ApplicationController
       redirect_to song_path(@song), notice: "Your suggestion has been submitted."
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+    authorize @edit_log
+  end
+
+  def update
+    authorize @edit_log
+    if @edit_log.update(edit_log_params.slice(:new_value))
+      redirect_to song_edit_log_path(@song, @edit_log), notice: "Suggestion updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 

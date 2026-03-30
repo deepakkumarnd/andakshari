@@ -6,6 +6,9 @@ class EditLogPolicy < ApplicationPolicy
     user.present? && (creator? || suggester?)
   end
 
+  def edit?    = suggester? && record.pending?
+  def update?  = suggester? && record.pending?
+
   def index?   = creator?
   def approve? = creator? && record.pending?
   def reject?  = creator? && record.pending?

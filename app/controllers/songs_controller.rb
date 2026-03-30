@@ -48,6 +48,7 @@ class SongsController < ApplicationController
     song_ids = results.map { |r| r[:song_id] }.reject { |id| id == @song.id }.first(10)
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
     @related_songs = song_ids.filter_map { |id| songs_by_id[id] }
+    @my_pending_edits = user_signed_in? ? @song.edit_logs.pending.where(user: current_user).index_by(&:field) : {}
   end
 
   # GET /songs/new

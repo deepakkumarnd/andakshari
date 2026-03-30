@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       post :like
       delete :unlike
     end
-    resources :edit_logs, only: %i[index new create show] do
+    resources :edit_logs, only: %i[index new create show edit update] do
       member do
         post :approve
         post :reject

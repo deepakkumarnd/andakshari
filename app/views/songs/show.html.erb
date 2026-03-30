@@ -43,8 +43,16 @@
         <p class="text-sm text-gray-500 mb-2">Suggest an edit:</p>
         <div class="flex flex-wrap gap-2">
           <% EditLog::FIELDS.each do |field| %>
-            <%= link_to field.capitalize, new_song_edit_log_path(@song, field: field),
-                  class: "text-sm px-3 py-1 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors" %>
+            <% if (existing = @my_pending_edits[field]) %>
+              <%= link_to song_edit_log_path(@song, existing),
+                    class: "text-sm px-3 py-1 rounded-md border border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors inline-flex items-center gap-1" do %>
+                <%= field.capitalize %>
+                <span class="text-xs font-medium">· pending</span>
+              <% end %>
+            <% else %>
+              <%= link_to field.capitalize, new_song_edit_log_path(@song, field: field),
+                    class: "text-sm px-3 py-1 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors" %>
+            <% end %>
           <% end %>
         </div>
       <% end %>
