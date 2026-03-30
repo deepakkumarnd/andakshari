@@ -26,16 +26,29 @@
     </div>
   <% end %>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-    <div>
-      <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Old value <span class="normal-case font-normal">(at time of suggestion)</span></p>
-      <div class="bg-red-50 border border-red-200 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm min-h-16"><%= @edit_log.old_value.presence || "(blank)" %></div>
+  <% if @edit_log.field == "lyrics" %>
+    <div class="mb-6">
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+        Changes
+        <span class="normal-case font-normal ml-2">
+          <span class="inline-block w-3 h-3 rounded-sm bg-red-100 border border-red-300 align-middle"></span> removed &nbsp;
+          <span class="inline-block w-3 h-3 rounded-sm bg-green-100 border border-green-300 align-middle"></span> added
+        </span>
+      </p>
+      <%= lyrics_diff_html(@edit_log.old_value, @edit_log.new_value) %>
     </div>
-    <div>
-      <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Suggested value</p>
-      <div class="bg-green-50 border border-green-200 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm min-h-16"><%= @edit_log.new_value %></div>
+  <% else %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Old value <span class="normal-case font-normal">(at time of suggestion)</span></p>
+        <div class="bg-red-50 border border-red-200 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm min-h-16"><%= @edit_log.old_value.presence || "(blank)" %></div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Suggested value</p>
+        <div class="bg-green-50 border border-green-200 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm min-h-16"><%= @edit_log.new_value %></div>
+      </div>
     </div>
-  </div>
+  <% end %>
 
   <% if current != @edit_log.old_value %>
     <div class="mb-6">
