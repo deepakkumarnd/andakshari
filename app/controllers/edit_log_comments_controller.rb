@@ -8,6 +8,13 @@ class EditLogCommentsController < ApplicationController
     authorize @comment
 
     if @comment.save
+      recipient = current_user == @song.user ? @edit_log.user : @song.user
+      NotificationService.notify(
+        user: recipient,
+        type: "info",
+        message: "#{current_user.email} commented on the edit suggestion for #{@song.movie} (#{@edit_log.field})",
+        url: song_edit_log_path(@song, @edit_log, anchor: "comment-#{@comment.id}")
+      )
       redirect_to song_edit_log_path(@song, @edit_log, anchor: "comment-#{@comment.id}"),
                   notice: "Comment added."
     else

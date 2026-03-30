@@ -1,0 +1,36 @@
+<div class="relative" data-controller="dropdown">
+  <button type="button" data-action="click->dropdown#toggle"
+          class="relative p-2 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+    </svg>
+    <% if notifications.any? %>
+      <span class="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-0.5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold leading-none">
+        <%= notifications.size > 99 ? "99+" : notifications.size %>
+      </span>
+    <% end %>
+  </button>
+
+  <div data-dropdown-target="panel"
+       class="hidden absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+    <div class="px-4 py-2.5 border-b border-gray-100">
+      <p class="text-sm font-semibold text-gray-700">Notifications</p>
+    </div>
+    <% if notifications.any? %>
+      <div class="max-h-96 overflow-y-auto divide-y divide-gray-50">
+        <% notifications.each do |notif| %>
+          <% border_class = notif.notification_type == "success" ? "border-green-400" : notif.notification_type == "danger" ? "border-red-400" : "border-blue-400" %>
+          <%= link_to notification_path(notif),
+                class: "flex items-start gap-3 px-4 py-3 hover:bg-gray-50 border-l-4 #{border_class} block" do %>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm text-gray-700 leading-snug"><%= notif.message %></p>
+              <p class="text-xs text-gray-400 mt-0.5"><%= time_ago_in_words(notif.created_at) %> ago</p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-400 px-4 py-5 text-center">No notifications</p>
+    <% end %>
+  </div>
+</div>

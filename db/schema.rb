@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_30_100000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_30_200000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -59,6 +59,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_30_100000) do
     t.index ["song_id"], name: "index_likes_on_song_id"
     t.index ["user_id", "song_id"], name: "index_likes_on_user_id_and_song_id", unique: true
     t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "notification_type", null: false
+    t.text "message", null: false
+    t.string "url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "created_at"], name: "index_notifications_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "song_tags", force: :cascade do |t|
@@ -115,6 +126,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_30_100000) do
   add_foreign_key "edit_logs", "users"
   add_foreign_key "likes", "songs"
   add_foreign_key "likes", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "song_tags", "songs"
   add_foreign_key "song_tags", "tags"
   add_foreign_key "songs", "users"

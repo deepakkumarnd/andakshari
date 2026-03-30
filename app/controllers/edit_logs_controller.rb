@@ -27,6 +27,12 @@ class EditLogsController < ApplicationController
     authorize @edit_log
 
     if @edit_log.save
+      NotificationService.notify(
+        user: @song.user,
+        type: "info",
+        message: "#{current_user.email} suggested an edit to #{@song.movie} (#{@edit_log.field})",
+        url: song_edit_log_path(@song, @edit_log)
+      )
       redirect_to song_path(@song), notice: "Your suggestion has been submitted."
     else
       render :new, status: :unprocessable_entity
@@ -40,6 +46,12 @@ class EditLogsController < ApplicationController
   def update
     authorize @edit_log
     if @edit_log.update(edit_log_params.slice(:new_value))
+      NotificationService.notify(
+        user: @song.user,
+        type: "info",
+        message: "#{current_user.email} updated their edit suggestion for #{@song.movie} (#{@edit_log.field})",
+        url: song_edit_log_path(@song, @edit_log)
+      )
       redirect_to song_edit_log_path(@song, @edit_log), notice: "Suggestion updated."
     else
       render :edit, status: :unprocessable_entity
@@ -49,6 +61,12 @@ class EditLogsController < ApplicationController
   def approve
     authorize @edit_log
     @edit_log.approve!
+    NotificationService.notify(
+      user: @edit_log.user,
+      type: "success",
+      message: "Your edit suggestion for #{@song.movie} (#{@edit_log.field}) was approved and applied",
+      url: song_edit_log_path(@song, @edit_log)
+    )
     redirect_to song_edit_logs_path(@song), notice: "Edit approved and applied."
   rescue ActiveRecord::RecordInvalid => e
     redirect_to song_edit_logs_path(@song), alert: "Could not apply edit: #{e.message}"
@@ -59,6 +77,12 @@ class EditLogsController < ApplicationController
   def reject
     authorize @edit_log
     @edit_log.reject!
+    NotificationService.notify(
+      user: @edit_log.user,
+      type: "danger",
+      message: "Your edit suggestion for #{@song.movie} (#{@edit_log.field}) was rejected",
+      url: song_edit_log_path(@song, @edit_log)
+    )
     redirect_to song_edit_logs_path(@song), notice: "Suggestion rejected."
   end
 
