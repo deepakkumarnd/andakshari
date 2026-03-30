@@ -15,6 +15,12 @@ Rails.application.routes.draw do
       post :like
       delete :unlike
     end
+    resources :edit_logs, only: %i[index new create show] do
+      member do
+        post :approve
+        post :reject
+      end
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

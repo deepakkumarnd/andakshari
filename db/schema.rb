@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_28_160000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_30_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -24,6 +24,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_160000) do
     t.index "to_tsvector('simple'::regconfig, content)", name: "index_chunks_on_content_fulltext", using: :gin
     t.index ["embedding"], name: "index_chunks_on_embedding", opclass: :vector_cosine_ops, using: :hnsw
     t.index ["song_id"], name: "index_chunks_on_song_id"
+  end
+
+  create_table "edit_logs", force: :cascade do |t|
+    t.bigint "song_id", null: false
+    t.bigint "user_id", null: false
+    t.string "field", null: false
+    t.text "old_value"
+    t.text "new_value", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["song_id", "status"], name: "index_edit_logs_on_song_id_and_status"
+    t.index ["song_id", "user_id", "field"], name: "index_edit_logs_on_song_id_and_user_id_and_field"
+    t.index ["song_id"], name: "index_edit_logs_on_song_id"
+    t.index ["user_id"], name: "index_edit_logs_on_user_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -84,6 +99,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_160000) do
   end
 
   add_foreign_key "chunks", "songs"
+  add_foreign_key "edit_logs", "songs"
+  add_foreign_key "edit_logs", "users"
   add_foreign_key "likes", "songs"
   add_foreign_key "likes", "users"
   add_foreign_key "song_tags", "songs"

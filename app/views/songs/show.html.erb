@@ -2,10 +2,6 @@
 
 <div class="w-full">
   <div class="md:w-2/3">
-    <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-    <% end %>
-
     <div class="flex items-center justify-between mb-4">
       <%= link_to songs_path, class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800" do %>
         &larr; Back to songs
@@ -30,6 +26,28 @@
 
     <div class="mt-4">
       <%= render "like_button", song: @song %>
+    </div>
+
+    <div class="mt-6 pt-5 border-t border-border">
+      <% pending_count = @song.edit_logs.pending.count %>
+      <% if policy(@song).update? %>
+        <% if pending_count > 0 %>
+          <%= link_to song_edit_logs_path(@song), class: "inline-flex items-center gap-2 text-sm font-medium text-amber-700 hover:text-amber-900" do %>
+            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold"><%= pending_count %></span>
+            <%= pluralize(pending_count, "pending edit suggestion") %>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-400">No pending edit suggestions.</p>
+        <% end %>
+      <% elsif user_signed_in? %>
+        <p class="text-sm text-gray-500 mb-2">Suggest an edit:</p>
+        <div class="flex flex-wrap gap-2">
+          <% EditLog::FIELDS.each do |field| %>
+            <%= link_to field.capitalize, new_song_edit_log_path(@song, field: field),
+                  class: "text-sm px-3 py-1 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors" %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 

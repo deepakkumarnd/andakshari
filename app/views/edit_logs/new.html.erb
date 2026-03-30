@@ -1,0 +1,52 @@
+<% content_for :title, "Suggest an edit" %>
+
+<div class="w-full md:w-2/3">
+  <%= link_to song_path(@song), class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-6 block" do %>
+    &larr; Back to song
+  <% end %>
+
+  <h1 class="font-bold text-3xl text-heading mb-2">Suggest a change</h1>
+  <p class="text-gray-500 mb-6">Suggesting an edit to <strong><%= @edit_log.field %></strong>. The song creator will review your suggestion before it is applied.</p>
+
+  <% if @edit_log.errors.any? %>
+    <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mb-5">
+      <ul class="list-disc ml-4">
+        <% @edit_log.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: [@song, @edit_log] do |f| %>
+    <%= f.hidden_field :field %>
+    <%= f.hidden_field :old_value %>
+
+    <div class="my-5">
+      <p class="text-sm font-medium text-gray-500 mb-1">Current value</p>
+      <div class="bg-gray-100 border border-gray-300 rounded-md px-3 py-2 text-gray-700 font-malayalam text-sm whitespace-pre-wrap"><%= @edit_log.old_value.presence || "(blank)" %></div>
+    </div>
+
+    <div class="my-5">
+      <%= f.label :new_value, "Your suggested value", class: "block text-sm font-medium text-gray-700 mb-2" %>
+
+      <% if @edit_log.field == "lyrics" %>
+        <%= f.textarea :new_value, rows: 20,
+              class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 w-full font-malayalam" %>
+      <% elsif @edit_log.field == "year" %>
+        <%= f.number_field :new_value,
+              class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 w-full" %>
+      <% elsif @edit_log.field == "tags" %>
+        <%= f.text_field :new_value, placeholder: "e.g. devotional, classic",
+              class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 w-full" %>
+        <p class="text-xs text-gray-500 mt-1">Enter tag names separated by commas. Only letters and digits allowed per tag.</p>
+      <% else %>
+        <%= f.text_field :new_value,
+              class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 w-full" %>
+      <% end %>
+    </div>
+
+    <%= f.submit "Submit suggestion",
+          class: "rounded-md px-3.5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white font-medium cursor-pointer" %>
+  <% end %>
+</div>

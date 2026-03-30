@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   has_many :songs, dependent: :nullify
   has_many :likes, dependent: :destroy
+  has_many :edit_logs, dependent: :destroy
   has_many :liked_songs, through: :likes, source: :song
 
   OTP_VALIDITY = 10.minutes

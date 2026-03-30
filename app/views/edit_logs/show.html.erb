@@ -1,0 +1,57 @@
+<% content_for :title, "Edit suggestion" %>
+
+<div class="w-full md:w-2/3">
+  <%= link_to song_path(@song), class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-6 block" do %>
+    &larr; Back to song
+  <% end %>
+
+  <div class="flex items-center gap-3 mb-6">
+    <h1 class="font-bold text-3xl text-heading">Edit suggestion</h1>
+    <span class="text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-md
+      <%= @edit_log.pending? ? 'bg-amber-100 text-amber-700' : (@edit_log.approved? ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600') %>">
+      <%= @edit_log.status %>
+    </span>
+  </div>
+
+  <dl class="text-sm text-gray-600 mb-6 flex flex-col gap-1">
+    <div class="flex gap-2"><dt class="font-medium w-24">Field</dt><dd><%= @edit_log.field.capitalize %></dd></div>
+    <div class="flex gap-2"><dt class="font-medium w-24">Suggested by</dt><dd><%= @edit_log.user.email %></dd></div>
+    <div class="flex gap-2"><dt class="font-medium w-24">Submitted</dt><dd><%= @edit_log.created_at.strftime("%d %b %Y, %H:%M") %></dd></div>
+  </dl>
+
+  <% current = @edit_log.current_song_value %>
+  <% if @edit_log.pending? && current != @edit_log.old_value %>
+    <div class="bg-amber-50 border border-amber-300 rounded-md px-4 py-3 text-sm text-amber-800 mb-5">
+      ⚠ The song's current value has changed since this suggestion was made. Review carefully before approving.
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Old value <span class="normal-case font-normal">(at time of suggestion)</span></p>
+      <div class="bg-red-50 border border-red-200 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm min-h-16"><%= @edit_log.old_value.presence || "(blank)" %></div>
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Suggested value</p>
+      <div class="bg-green-50 border border-green-200 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm min-h-16"><%= @edit_log.new_value %></div>
+    </div>
+  </div>
+
+  <% if current != @edit_log.old_value %>
+    <div class="mb-6">
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Current live value on song</p>
+      <div class="bg-gray-100 border border-gray-300 rounded-md px-4 py-3 text-gray-700 font-malayalam whitespace-pre-wrap text-sm"><%= current.presence || "(blank)" %></div>
+    </div>
+  <% end %>
+
+  <% if policy(@edit_log).approve? %>
+    <div class="flex gap-3">
+      <%= button_to "Approve & apply", approve_song_edit_log_path(@song, @edit_log),
+            method: :post,
+            class: "px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white font-medium cursor-pointer" %>
+      <%= button_to "Reject", reject_song_edit_log_path(@song, @edit_log),
+            method: :post,
+            class: "px-4 py-2 rounded-md bg-white hover:bg-gray-100 text-gray-700 font-medium border border-gray-300 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

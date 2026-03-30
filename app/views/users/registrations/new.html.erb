@@ -4,10 +4,6 @@
   <div class="border border-border rounded-2xl p-8 bg-gray-50">
     <h1 class="text-3xl font-bold text-heading mb-6 text-center font-logo">Create Account</h1>
 
-    <% if flash[:alert] %>
-      <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mb-4"><%= flash[:alert] %></div>
-    <% end %>
-
     <% if @step == :otp %>
       <%= form_with url: user_registration_path, method: :post, class: "space-y-5" do |f| %>
         <p class="text-sm text-gray-500">We sent a 6-digit code to <strong><%= @email %></strong></p>
