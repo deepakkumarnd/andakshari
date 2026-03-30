@@ -10,6 +10,8 @@ class EditLogsController < ApplicationController
 
   def show
     authorize @edit_log
+    @comments = @edit_log.edit_log_comments.includes(:user).order(created_at: :asc)
+    @new_comment = EditLogComment.new
   end
 
   def new

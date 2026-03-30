@@ -41,11 +41,9 @@
           <% end %>
 
           <div class="flex items-center justify-between">
-            <% if edit_log.field == "lyrics" %>
-              <%= link_to "View full diff →", song_edit_log_path(@song, edit_log), class: "text-sm text-gray-600 hover:text-gray-900" %>
-            <% else %>
-              <span></span>
-            <% end %>
+            <%= link_to edit_log.field == "lyrics" ? "View full diff →" : "View →",
+                  song_edit_log_path(@song, edit_log),
+                  class: "text-sm text-gray-600 hover:text-gray-900" %>
             <div class="flex gap-2">
               <%= button_to "Approve", approve_song_edit_log_path(@song, edit_log),
                     method: :post,

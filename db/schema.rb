@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_30_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_30_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -24,6 +24,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_30_000000) do
     t.index "to_tsvector('simple'::regconfig, content)", name: "index_chunks_on_content_fulltext", using: :gin
     t.index ["embedding"], name: "index_chunks_on_embedding", opclass: :vector_cosine_ops, using: :hnsw
     t.index ["song_id"], name: "index_chunks_on_song_id"
+  end
+
+  create_table "edit_log_comments", force: :cascade do |t|
+    t.bigint "edit_log_id", null: false
+    t.bigint "user_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["edit_log_id"], name: "index_edit_log_comments_on_edit_log_id"
+    t.index ["user_id"], name: "index_edit_log_comments_on_user_id"
   end
 
   create_table "edit_logs", force: :cascade do |t|
@@ -99,6 +109,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_30_000000) do
   end
 
   add_foreign_key "chunks", "songs"
+  add_foreign_key "edit_log_comments", "edit_logs"
+  add_foreign_key "edit_log_comments", "users"
   add_foreign_key "edit_logs", "songs"
   add_foreign_key "edit_logs", "users"
   add_foreign_key "likes", "songs"

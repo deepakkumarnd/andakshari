@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         post :approve
         post :reject
       end
+      resources :edit_log_comments, only: :create
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

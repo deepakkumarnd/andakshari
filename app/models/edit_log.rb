@@ -4,6 +4,7 @@ class EditLog < ApplicationRecord
 
   belongs_to :song
   belongs_to :user
+  has_many :edit_log_comments, dependent: :destroy
 
   validates :field,     inclusion: { in: FIELDS }
   validates :status,    inclusion: { in: STATUSES }
