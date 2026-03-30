@@ -36,10 +36,14 @@ class SongSearchService
     return search_by_letter if @starting_letter.present?
     return [] if @query.blank?
 
-    embedding = EmbeddingService.embed_many([ @query ]).first
+    text_results = text_search_song_ids
 
-    vector_results = vector_search(embedding)
-    text_results   = text_search_song_ids
+    if FeatureFlags.enabled?(:vector_search)
+      embedding      = EmbeddingService.embed_many([ @query ]).first
+      vector_results = vector_search(embedding)
+    else
+      vector_results = []
+    end
 
     text_song_ids = text_results.map { |r| r[:song_id] }
 

@@ -1,0 +1,8 @@
+vector_search:
+  description: "Semantic vector search using Ollama embeddings and pgvector"
+  development:
+    enabled: true
+  test:
+    enabled: false
+  production:
+    enabled: false
