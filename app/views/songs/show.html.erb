@@ -39,7 +39,7 @@
         <% else %>
           <p class="text-sm text-gray-400">No pending edit suggestions.</p>
         <% end %>
-      <% elsif user_signed_in? %>
+      <% elsif policy(@song).suggest_edit? %>
         <p class="text-sm text-gray-500 mb-2">Suggest an edit:</p>
         <div class="flex flex-wrap gap-2">
           <% EditLog::FIELDS.each do |field| %>

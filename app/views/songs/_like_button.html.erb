@@ -1,6 +1,6 @@
 <%= turbo_frame_tag dom_id(song, :like) do %>
   <div class="inline-flex items-center gap-1">
-    <% if user_signed_in? %>
+    <% if policy(song).like? %>
       <% liked = current_user.likes.exists?(song_id: song.id) %>
       <%= button_to liked ? unlike_song_path(song) : like_song_path(song),
           method: liked ? :delete : :post,

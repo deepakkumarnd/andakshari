@@ -8,7 +8,7 @@ class SongPolicy < ApplicationPolicy
   end
 
   def show?
-    user.present?
+    true
   end
 
   def create?
@@ -16,10 +16,18 @@ class SongPolicy < ApplicationPolicy
   end
 
   def update?
-    record.user == user
+    user.present? && record.user == user
   end
 
   def destroy?
-    record.user == user
+    user.present? && record.user == user
+  end
+
+  def like?
+    user.present?
+  end
+
+  def suggest_edit?
+    user.present? && record.user != user
   end
 end

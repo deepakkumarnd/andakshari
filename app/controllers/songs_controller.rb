@@ -1,5 +1,5 @@
 class SongsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[ index search search_by_tag search_by_year ]
+  skip_before_action :authenticate_user!, only: %i[ index show search search_by_tag search_by_year ]
   before_action :set_song, only: %i[ show edit update destroy like unlike ]
 
   PAGE_SIZE = 10
