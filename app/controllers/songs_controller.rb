@@ -13,12 +13,14 @@ class SongsController < ApplicationController
   # POST /songs/search
   def search
     authorize Song
-    results = SongSearchService.search(search_query)
+    query = search_query
+    results = SongSearchService.search(query)
     song_ids = results.map { |r| r[:song_id] }
     songs_by_id = Song.where(id: song_ids).index_by(&:id)
     all_songs = song_ids.filter_map { |id| songs_by_id[id] }
     @match_by_song_id = results.to_h { |r| [ r[:song_id], { match: r[:match], top_result: r[:top_result] } ] }
     @pagy, @songs = pagy(all_songs, limit: PAGE_SIZE)
+    log_search(query, kind: params[:audio].present? ? "voice" : "text", count: all_songs.size)
   end
 
   # GET /songs/search_by_year?year=1990
@@ -26,6 +28,7 @@ class SongsController < ApplicationController
     authorize Song, :search?
     @year = params[:year].to_i
     @pagy, @songs = pagy(SongSearchService.search_by_year(@year), limit: PAGE_SIZE)
+    log_search(@year.to_s, kind: "year", count: @pagy.count)
   end
 
   # GET /songs/search_by_tag?tag=devotional
@@ -33,6 +36,7 @@ class SongsController < ApplicationController
     authorize Song, :search?
     @tag = params[:tag].to_s.strip
     @pagy, @songs = pagy(SongSearchService.search_by_tag(@tag), limit: PAGE_SIZE)
+    log_search(@tag, kind: "tag", count: @pagy.count)
   end
 
   # GET /songs/suggest
@@ -163,5 +167,14 @@ class SongsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def song_params
       params.expect(song: [ :lyrics, :movie, :year ])
+    end
+
+    def log_search(query, kind:, count:)
+      SearchLog.create!(
+        query: query.to_s.strip.truncate(500),
+        kind: kind,
+        results_count: count,
+        ip_address: request.remote_ip
+      )
     end
 end

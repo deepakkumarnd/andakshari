@@ -8,11 +8,13 @@ admin = User.find_or_initialize_by(email: admin_email)
 if admin.new_record?
   generated_password = SecureRandom.hex(10)
   admin.password = generated_password
+  admin.role = "admin"
   admin.save!
   puts "Created admin user — login with:"
   puts "  Email:    #{admin_email}"
   puts "  Password: #{generated_password}"
 else
+  admin.update!(role: "admin") unless admin.admin?
   puts "Admin user already exists: #{admin_email}"
 end
 

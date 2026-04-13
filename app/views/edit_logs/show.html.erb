@@ -15,7 +15,7 @@
 
   <dl class="text-sm text-gray-600 mb-6 flex flex-col gap-1">
     <div class="flex gap-2"><dt class="font-medium w-24">Field</dt><dd><%= @edit_log.field.capitalize %></dd></div>
-    <div class="flex gap-2"><dt class="font-medium w-24">Suggested by</dt><dd><%= @edit_log.user.email %></dd></div>
+    <div class="flex gap-2"><dt class="font-medium w-24">Suggested by</dt><dd><%= @edit_log.user.username %></dd></div>
     <div class="flex gap-2"><dt class="font-medium w-24">Submitted</dt><dd><%= @edit_log.created_at.strftime("%d %b %Y, %H:%M") %></dd></div>
   </dl>
 
@@ -72,7 +72,7 @@
       <p class="text-sm text-gray-400 mb-5">No comments yet.</p>
     <% end %>
 
-    <% can_comment = user_signed_in? && (@song.user == current_user || @edit_log.user == current_user) %>
+    <% can_comment = policy(EditLogComment.new(edit_log: @edit_log, user: current_user)).create? %>
     <% if can_comment %>
       <%= form_with url: song_edit_log_edit_log_comments_path(@song, @edit_log), method: :post, class: "flex flex-col gap-2" do |f| %>
         <%= f.textarea :body,

@@ -15,7 +15,7 @@
         <div class="border border-border rounded-2xl p-5 bg-gray-50 flex flex-col gap-3">
           <div class="flex items-center gap-2">
             <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 bg-gray-200 px-2 py-0.5 rounded-md"><%= edit_log.field %></span>
-            <span class="text-sm text-gray-500">by <%= edit_log.user.email %></span>
+            <span class="text-sm text-gray-500">by <%= edit_log.user.username %></span>
             <span class="text-xs text-gray-400"><%= time_ago_in_words(edit_log.created_at) %> ago</span>
           </div>
 

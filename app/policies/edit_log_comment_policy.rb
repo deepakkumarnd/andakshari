@@ -1,6 +1,6 @@
 class EditLogCommentPolicy < ApplicationPolicy
   def create?
-    user.present? && (creator? || suggester?)
+    user.present? && (user.admin? || creator? || suggester?)
   end
 
   private

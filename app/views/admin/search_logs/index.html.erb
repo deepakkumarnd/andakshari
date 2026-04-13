@@ -1,0 +1,57 @@
+<% content_for :title, "Search Logs" %>
+
+<div class="max-w-4xl w-full">
+  <div class="flex items-center gap-4 mb-6">
+    <%= link_to admin_dashboard_path, class: "text-sm text-gray-500 hover:text-gray-800" do %>
+      &larr; Dashboard
+    <% end %>
+    <h1 class="text-2xl font-bold text-heading">Search Logs</h1>
+  </div>
+
+  <% if @search_logs.any? %>
+    <div class="border border-border rounded-xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-border">
+          <tr>
+            <th class="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Query</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Kind</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Results</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">IP</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">When</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border bg-white">
+          <% @search_logs.each do |log| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-malayalam max-w-xs truncate">
+                <% if log.query.present? %>
+                  <%= log.query %>
+                <% else %>
+                  <em class="text-gray-400">empty</em>
+                <% end %>
+              </td>
+              <td class="px-4 py-3">
+                <span class="text-xs px-2 py-0.5 rounded-full font-medium
+                  <%= log.kind == 'voice' ? 'bg-purple-100 text-purple-700' :
+                      log.kind == 'tag'   ? 'bg-blue-100 text-blue-700' :
+                      log.kind == 'year'  ? 'bg-amber-100 text-amber-700' :
+                                            'bg-gray-100 text-gray-600' %>">
+                  <%= log.kind %>
+                </span>
+              </td>
+              <td class="px-4 py-3 text-gray-600"><%= log.results_count %></td>
+              <td class="px-4 py-3 text-gray-500 font-mono text-xs"><%= log.ip_address %></td>
+              <td class="px-4 py-3 text-gray-500"><%= time_ago_in_words(log.created_at) %> ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4">
+      <%== @pagy.series_nav %>
+    </div>
+  <% else %>
+    <p class="text-sm text-gray-400">No searches logged yet.</p>
+  <% end %>
+</div>
