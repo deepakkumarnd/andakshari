@@ -1,12 +1,36 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { text: String }
+  static values = { text: String, message: String }
 
   copy() {
-    navigator.clipboard.writeText(this.textValue).then(() => {
-      this._toast("Lyrics copied")
-    })
+    const text = this.textValue
+    const message = this.messageValue || "Copied"
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => this._toast(message))
+        .catch(() => this._fallbackCopy(text, message))
+    } else {
+      this._fallbackCopy(text, message)
+    }
+  }
+
+  _fallbackCopy(text, message) {
+    const textarea = document.createElement("textarea")
+    textarea.value = text
+    textarea.style.cssText = "position:fixed;top:-9999px;left:-9999px;opacity:0"
+    document.body.appendChild(textarea)
+    textarea.focus()
+    textarea.select()
+    try {
+      document.execCommand("copy")
+      this._toast(message)
+    } catch {
+      this._toast("Could not copy — please copy manually")
+    } finally {
+      document.body.removeChild(textarea)
+    }
   }
 
   _toast(message) {

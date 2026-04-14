@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_13_121937) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_14_070959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -49,6 +49,25 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_121937) do
     t.index ["song_id", "user_id", "field"], name: "index_edit_logs_on_song_id_and_user_id_and_field"
     t.index ["song_id"], name: "index_edit_logs_on_song_id"
     t.index ["user_id"], name: "index_edit_logs_on_user_id"
+  end
+
+  create_table "game_participants", force: :cascade do |t|
+    t.uuid "game_room_id", null: false
+    t.bigint "user_id", null: false
+    t.string "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_room_id", "user_id"], name: "index_game_participants_on_game_room_id_and_user_id", unique: true
+    t.index ["game_room_id"], name: "index_game_participants_on_game_room_id"
+    t.index ["user_id"], name: "index_game_participants_on_user_id"
+  end
+
+  create_table "game_rooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "status", default: "waiting", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_game_rooms_on_user_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -257,6 +276,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_121937) do
   add_foreign_key "edit_log_comments", "users"
   add_foreign_key "edit_logs", "songs"
   add_foreign_key "edit_logs", "users"
+  add_foreign_key "game_participants", "game_rooms"
+  add_foreign_key "game_participants", "users"
+  add_foreign_key "game_rooms", "users"
   add_foreign_key "likes", "songs"
   add_foreign_key "likes", "users"
   add_foreign_key "notifications", "users"

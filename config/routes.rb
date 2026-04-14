@@ -24,6 +24,9 @@ Rails.application.routes.draw do
     end
   end
   resources :notifications, only: [ :show ]
+  resources :game_rooms, only: %i[new create show] do
+    resources :game_participants, only: :create
+  end
 
   namespace :admin do
     resource :dashboard, only: :show

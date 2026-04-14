@@ -6,6 +6,9 @@
     <% end %>
     <div class="flex-1 flex items-center gap-1 justify-end">
       <% if user_signed_in? %>
+        <%= link_to new_game_room_path, class: "p-2 rounded-full hover:bg-gray-100 text-gray-500", title: "Start a game" do %>
+          <%= image_tag "gamepad.svg", class: "w-5 h-5", alt: "Play" %>
+        <% end %>
         <% if current_user.admin? %>
           <%= link_to admin_dashboard_path, class: "p-2 rounded-full hover:bg-gray-100 text-gray-500", title: "Admin dashboard" do %>
             <%= image_tag "squares.svg", class: "w-5 h-5", alt: "Admin" %>

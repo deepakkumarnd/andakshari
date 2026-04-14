@@ -1,0 +1,66 @@
+<% content_for :title, "Game Room" %>
+
+<%= turbo_stream_from "game_room_#{@game_room.id}" %>
+
+<div id="game-room-lobby" class="max-w-2xl w-full">
+  <%# Header %>
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-heading">Game Room</h1>
+      <p class="text-xs text-gray-400 mt-1 font-mono"><%= @game_room.id %></p>
+    </div>
+    <span class="text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-md
+      <%= @game_room.waiting? ? 'bg-amber-100 text-amber-700' :
+          @game_room.playing? ? 'bg-green-100 text-green-700' :
+                                'bg-gray-100 text-gray-500' %>">
+      <%= @game_room.status %>
+    </span>
+  </div>
+
+  <%# Share link %>
+  <div class="mb-6 flex items-center gap-2 bg-gray-50 border border-border rounded-xl px-4 py-3">
+    <span class="text-xs text-gray-500 flex-1 truncate font-mono"><%= game_room_url(@game_room) %></span>
+    <div data-controller="clipboard"
+         data-clipboard-text-value="<%= game_room_url(@game_room) %>"
+         data-clipboard-message-value="Link copied">
+      <button data-action="click->clipboard#copy"
+              class="inline-flex items-center gap-1.5 text-xs text-gray-600 border border-gray-300 hover:border-gray-400 hover:text-gray-800 px-2.5 py-1 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+        <%= image_tag "clipboard.svg", class: "w-3.5 h-3.5", alt: "Copy" %>
+        Copy link
+      </button>
+    </div>
+  </div>
+
+  <%# Join / Watch actions %>
+  <% if @me.nil? %>
+    <div class="mb-6 flex gap-3">
+      <% unless @game_room.players_full? %>
+        <%= button_to game_room_game_participants_path(@game_room), method: :post,
+              class: "px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-semibold text-sm cursor-pointer transition-colors" do %>
+          Join as player
+        <% end %>
+      <% end %>
+      <% unless @game_room.watchers_full? || !@game_room.players_full? %>
+        <%# Only show explicit Watch button when player slots are full %>
+      <% end %>
+      <% if @game_room.players_full? && !@game_room.watchers_full? %>
+        <%= button_to game_room_game_participants_path(@game_room), method: :post,
+              class: "px-5 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold text-sm cursor-pointer transition-colors" do %>
+          Watch
+        <% end %>
+      <% end %>
+      <% if @game_room.players_full? && @game_room.watchers_full? %>
+        <p class="text-sm text-gray-400 self-center">This room is full.</p>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-sm text-gray-500 mb-6">
+      You are in this room as a <span class="font-medium text-gray-800"><%= @me.role %></span>.
+    </p>
+  <% end %>
+
+  <%# Participants — updated in real-time via Turbo Streams broadcast %>
+  <%= turbo_frame_tag "participants-frame" do %>
+    <%= render "participants", game_room: @game_room, players: @players, watchers: @watchers %>
+  <% end %>
+</div>

@@ -1,0 +1,11 @@
+<% content_for :title, "New Game Room" %>
+
+<div class="max-w-sm w-full mx-auto mt-10">
+  <h1 class="text-2xl font-bold text-heading mb-2">Start a game room</h1>
+  <p class="text-sm text-gray-500 mb-6">Share the link with up to 6 players. Anyone with the link can join or watch.</p>
+
+  <%= button_to game_rooms_path, method: :post,
+        class: "w-full py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-semibold text-sm cursor-pointer transition-colors" do %>
+    Create room
+  <% end %>
+</div>

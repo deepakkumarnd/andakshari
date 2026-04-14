@@ -1,0 +1,53 @@
+<div class="grid sm:grid-cols-2 gap-6">
+  <%# Players %>
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+        Players
+      </h2>
+      <span class="text-xs text-gray-400"><%= players.count %> / <%= GameRoom::MAX_PLAYERS %></span>
+    </div>
+    <div class="flex flex-col gap-2">
+      <% players.each do |p| %>
+        <div class="flex items-center gap-3 border border-border rounded-xl px-4 py-3 bg-white">
+          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
+            <%= p.user.username.first.upcase %>
+          </div>
+          <span class="text-sm font-medium text-gray-800"><%= p.user.username %></span>
+          <% if p.user == game_room.user %>
+            <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">host</span>
+          <% end %>
+        </div>
+      <% end %>
+      <% (GameRoom::MAX_PLAYERS - players.count).times do %>
+        <div class="border border-dashed border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-400">
+          Empty slot
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# Watchers %>
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+        Watchers
+      </h2>
+      <span class="text-xs text-gray-400"><%= watchers.count %> / <%= GameRoom::MAX_WATCHERS %></span>
+    </div>
+    <div class="flex flex-col gap-2">
+      <% if watchers.any? %>
+        <% watchers.each do |p| %>
+          <div class="flex items-center gap-3 border border-border rounded-xl px-4 py-3 bg-white">
+            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-400">
+              <%= p.user.username.first.upcase %>
+            </div>
+            <span class="text-sm text-gray-600"><%= p.user.username %></span>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-sm text-gray-400">No watchers yet.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

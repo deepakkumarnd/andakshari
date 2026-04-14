@@ -26,7 +26,7 @@
 
     <div class="mt-4 flex items-center gap-3">
       <%= render "like_button", song: @song %>
-      <div data-controller="clipboard" data-clipboard-text-value="<%= @song.lyrics %>">
+      <div data-controller="clipboard" data-clipboard-text-value="<%= @song.lyrics %>" data-clipboard-message-value="Lyrics copied">
         <button data-action="click->clipboard#copy"
                 class="inline-flex items-center gap-1.5 text-xs text-gray-600 border border-gray-300 hover:border-gray-400 hover:text-gray-800 px-2.5 py-1 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
           <%= image_tag "clipboard.svg", class: "w-3.5 h-3.5", alt: "Copy" %>
