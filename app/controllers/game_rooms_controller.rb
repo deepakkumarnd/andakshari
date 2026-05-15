@@ -15,9 +15,11 @@ class GameRoomsController < ApplicationController
   end
 
   def show
-    @game_room = GameRoom.find(params[:id])
-    @players   = @game_room.players.includes(:user)
-    @watchers  = @game_room.watchers.includes(:user)
-    @me        = @game_room.participant(current_user)
+    @game_room = GameRoom.find_by(id: params[:id])
+    return render :not_found, status: :not_found unless @game_room
+
+    @players  = @game_room.players.includes(:user)
+    @watchers = @game_room.watchers.includes(:user)
+    @me       = @game_room.participant(current_user)
   end
 end

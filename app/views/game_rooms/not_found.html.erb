@@ -1,0 +1,12 @@
+<% content_for :title, "Game Room Not Found" %>
+
+<div class="max-w-md w-full mx-auto text-center py-16">
+  <%= image_tag "x-mark.svg", class: "w-12 h-12 mx-auto text-gray-300 mb-6", alt: "" %>
+  <h1 class="text-xl font-bold text-heading mb-2">This game room is not available</h1>
+  <p class="text-sm text-gray-500 mb-8">The room may have ended or the link is no longer valid.</p>
+  <%= link_to new_game_room_path,
+        class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-semibold text-sm transition-colors" do %>
+    <%= image_tag "gamepad.svg", class: "w-4 h-4", alt: "" %>
+    Start a new game
+  <% end %>
+</div>

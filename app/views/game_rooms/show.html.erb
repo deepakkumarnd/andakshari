@@ -54,9 +54,16 @@
       <% end %>
     </div>
   <% else %>
-    <p class="text-sm text-gray-500 mb-6">
-      You are in this room as a <span class="font-medium text-gray-800"><%= @me.role %></span>.
-    </p>
+    <div class="mb-6 flex items-center gap-4">
+      <p class="text-sm text-gray-500">
+        You are in this room as a <span class="font-medium text-gray-800"><%= @me.role %></span>.
+      </p>
+      <%= button_to game_room_game_participant_path(@game_room, @me), method: :delete,
+            data: { turbo_confirm: "Leave this room?" },
+            class: "ml-auto text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors cursor-pointer" do %>
+        Leave room
+      <% end %>
+    </div>
   <% end %>
 
   <%# Participants — updated in real-time via Turbo Streams broadcast %>

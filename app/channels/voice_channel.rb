@@ -17,6 +17,27 @@ class VoiceChannel < ApplicationCable::Channel
     )
   end
 
+  def unsubscribed
+    game_room = GameRoom.find_by(id: params[:game_room_id])
+    return unless game_room
+
+    participant = game_room.game_participants.find_by(user: current_user)
+    return unless participant
+
+    participant.destroy
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "game_room_#{game_room.id}",
+      target: "participants-frame",
+      partial: "game_rooms/participants",
+      locals: {
+        game_room: game_room,
+        players:   game_room.players.includes(:user),
+        watchers:  game_room.watchers.includes(:user)
+      }
+    )
+  end
+
   # Broadcast presence so existing users initiate offers to the new arrival
   def announce(_data)
     ActionCable.server.broadcast(

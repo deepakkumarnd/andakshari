@@ -15,6 +15,13 @@ class GameParticipantsController < ApplicationController
     redirect_to @game_room
   end
 
+  def destroy
+    participant = @game_room.game_participants.find_by!(user: current_user)
+    participant.destroy
+    broadcast_participants
+    redirect_to root_path, notice: "You left the game room."
+  end
+
   private
 
   def set_game_room
