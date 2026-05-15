@@ -9,14 +9,19 @@
     </div>
     <div class="flex flex-col gap-2">
       <% players.each do |p| %>
-        <div class="flex items-center gap-3 border border-border rounded-xl px-4 py-3 bg-white">
+        <div class="flex items-center gap-3 border border-border rounded-xl px-4 py-3 bg-white"
+             data-participant-id="<%= p.user.id %>">
           <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
             <%= p.user.username.first.upcase %>
           </div>
           <span class="text-sm font-medium text-gray-800"><%= p.user.username %></span>
-          <% if p.user == game_room.user %>
-            <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">host</span>
-          <% end %>
+          <div class="ml-auto flex items-center gap-2">
+            <%= image_tag "mic.svg", class: "w-4 h-4 text-green-500", alt: "Live",
+                  title: "Live", data: { mic_indicator: true } %>
+            <% if p.user == game_room.user %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">host</span>
+            <% end %>
+          </div>
         </div>
       <% end %>
       <% (GameRoom::MAX_PLAYERS - players.count).times do %>
@@ -38,11 +43,14 @@
     <div class="flex flex-col gap-2">
       <% if watchers.any? %>
         <% watchers.each do |p| %>
-          <div class="flex items-center gap-3 border border-border rounded-xl px-4 py-3 bg-white">
+          <div class="flex items-center gap-3 border border-border rounded-xl px-4 py-3 bg-white"
+               data-participant-id="<%= p.user.id %>">
             <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-400">
               <%= p.user.username.first.upcase %>
             </div>
             <span class="text-sm text-gray-600"><%= p.user.username %></span>
+            <%= image_tag "mic.svg", class: "ml-auto w-4 h-4 text-green-500", alt: "Live",
+                  title: "Live", data: { mic_indicator: true } %>
           </div>
         <% end %>
       <% else %>

@@ -63,4 +63,23 @@
   <%= turbo_frame_tag "participants-frame" do %>
     <%= render "participants", game_room: @game_room, players: @players, watchers: @watchers %>
   <% end %>
+
+  <%# Voice bar — only shown to participants who have joined %>
+  <% if @me %>
+    <div class="mt-6 pt-5 border-t border-border"
+         data-controller="voice"
+         data-voice-game-room-id-value="<%= @game_room.id %>"
+         data-voice-user-id-value="<%= current_user.id %>">
+      <div class="flex items-center gap-4">
+        <button data-voice-target="micBtn"
+                data-action="click->voice#toggleMute"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium cursor-pointer transition-colors bg-green-50 text-green-700 border-green-300">
+          <%= image_tag "mic.svg", class: "w-4 h-4", alt: "Mic", data: { voice_target: "micIcon" } %>
+          <%= image_tag "mic-off.svg", class: "w-4 h-4 hidden", alt: "Muted", data: { voice_target: "muteIcon" } %>
+          <span data-voice-target="statusText">Connecting…</span>
+        </button>
+        <p class="text-xs text-gray-400">Click to mute / unmute your microphone</p>
+      </div>
+    </div>
+  <% end %>
 </div>
