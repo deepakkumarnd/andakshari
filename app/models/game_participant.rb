@@ -1,18 +1,21 @@
-class GameParticipant < ApplicationRecord
+class GameParticipant
   ROLES = %w[player watcher].freeze
 
-  belongs_to :game_room
-  belongs_to :user
+  attr_reader :user, :game_room, :role
 
-  enum :role, ROLES.index_by(&:itself)
+  def initialize(user:, game_room:, role:)
+    @user      = user
+    @game_room = game_room
+    @role      = role
+  end
 
-  validates :role, inclusion: { in: ROLES }
+  def id; user.id; end
 
-  after_destroy :schedule_cleanup
+  def player?;  role == "player";  end
+  def watcher?; role == "watcher"; end
 
-  private
-
-  def schedule_cleanup
+  def destroy
+    game_room.remove_participant!(user: user)
     CleanupEmptyGameRoomJob.set(wait: 1.minute).perform_later(game_room.id)
   end
 end

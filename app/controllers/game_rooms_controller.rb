@@ -1,25 +1,18 @@
 class GameRoomsController < ApplicationController
-  def new
-    @game_room = GameRoom.new
-  end
+  def new; end
 
   def create
-    @game_room = GameRoom.new(user: current_user)
-    if @game_room.save
-      # Creator joins as a player automatically
-      @game_room.game_participants.create!(user: current_user, role: "player")
-      redirect_to @game_room
-    else
-      render :new, status: :unprocessable_entity
-    end
+    @game_room = GameRoom.create!(user: current_user)
+    @game_room.add_participant!(user: current_user, role: "player")
+    redirect_to game_room_path(@game_room)
   end
 
   def show
-    @game_room = GameRoom.find_by(id: params[:id])
+    @game_room = GameRoom.find(params[:id])
     return render :not_found, status: :not_found unless @game_room
 
-    @players  = @game_room.players.includes(:user)
-    @watchers = @game_room.watchers.includes(:user)
+    @players  = @game_room.players
+    @watchers = @game_room.watchers
     @me       = @game_room.participant(current_user)
   end
 end
